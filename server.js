@@ -1,13 +1,17 @@
 const express = require('express')
+const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
 const db = require('./models')
 const config = require('./config.json')
 
+const corsOptions = {
+    origin:config.origin,
+}
 
 //MIDDLEWARE
 app.use(bodyParser.json())
-
+app.use(cors(corsOptions))
 
 
 app.delete('/factories/:factoryId', async (req, res) => {
