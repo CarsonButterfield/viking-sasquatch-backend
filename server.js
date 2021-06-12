@@ -4,16 +4,16 @@ const db = require('./models')
 const config = require('./config.json')
 
 
-
+//deletes the old master node and replaces it with a new one
 app.post('/reset', async ( req, res ) => {
     try{
-        await db.masterNode.deleteMany({});
+        await db.masterNode.deleteMany({}); // just to be safe, in case I accidentally create multiple
         const newMaster = await db.masterNode.create({
             factoryCount:3,
         })
         
         res.status(200).json(newMaster)
-    }catch(err){
+    } catch(err){
         console.log(err)
         res.status(500).send(err)
     } 
@@ -21,8 +21,9 @@ app.post('/reset', async ( req, res ) => {
 // index route, sends the master node back to the user
 app.get('/', async (req, res) => {
    try {
-        const data = await db.masterNode.findOne({})
-        res.send(data)
+        const masterNode = await db.masterNode.findOne({})
+        await masterNode.createFactories(3)
+        res.send(masterNode)
    } catch (err) {
         console.log(err)
         res.status(500).json(err)
