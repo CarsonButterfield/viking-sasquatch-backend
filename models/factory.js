@@ -20,9 +20,9 @@ const factorySchema = new Schema({
 });
 
 factorySchema.methods.createChildren = function(){
+    this.children = [];
     for(let i = 0; i < this.childCount; i++){
-        const newVal = (Math.random() * this.maxVal) + this.minVal;
-        console.log(newVal)
+        const newVal = Math.floor((Math.random() * this.maxVal) + this.minVal);
         this.children.push(newVal)
     }
 }

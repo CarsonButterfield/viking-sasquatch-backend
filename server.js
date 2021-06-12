@@ -8,9 +8,60 @@ const config = require('./config.json')
 //MIDDLEWARE
 app.use(bodyParser.json())
 
-app.post('/populateFactories', async (req, res) => {
+
+
+app.delete('/factories/:factoryId', async (req, res) => {
+    try {
+        const masterNode = await db.masterNode.findOne({})
+        masterNode.factories = masterNode.factories.filter(f => {
+            return f._id != req.params.factoryId;
+        })
+        await masterNode.save();
+        res.status(200).json(masterNode)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({err:500})
+    }
+})
+
+app.post('/factories', async (req, res) => {
+    try {
+        const masterNode = await db.masterNode.findOne({})
+        await masterNode.createFactories(1)
+        res.status(200).json(masterNode)
+
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({err:500})
+    }
+})
+
+//Factory updates
+app.put('/factories/:factoryId', async (req, res) => {
+    try {
+        const masterNode = await db.masterNode.findOne({})
+        const factory = masterNode.factories.find( f => {
+            console.log(f._id)
+            return f._id == req.params.factoryId 
+        })
+        if(!factory) return res.status(404).json({err:404});
+        // console.log(factory.schema.obj)
+        for(value in factory.schema.obj){ // assigning combatible values from the user
+            if (req.body[value]){
+                factory[value] = req.body[value]
+            }
+        }
+        await masterNode.save()
+        res.status(200).json({masterNode})
+    }catch(err){
+        console.log(err)
+        res.status(500).json({err:500})
+    }
+})
+
+app.post('/factories/children', async (req, res) => {
     try{
-        const masterNode = await db.masterNode.findOne({});
+        const masterNode = await db.masterNode.findOne({})
         for(let factory of masterNode.factories){
             await factory.createChildren()
         }
