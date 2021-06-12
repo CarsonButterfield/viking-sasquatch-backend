@@ -9,6 +9,4 @@ const masterNodeSchema = new Schema({
 
 const masterNode = model('masterNode',masterNodeSchema)
 
-module.exports = {
-    masterNode
-}
+module.exports = masterNode
