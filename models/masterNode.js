@@ -6,6 +6,8 @@ const masterNodeSchema = new Schema({
     factories: [factory.schema],
 })
 
+
+// a method to add factories to the master node
 masterNodeSchema.methods.createFactories = async function(newFactories){
     try{
         for(let i = 0; i < newFactories; i++){
@@ -16,6 +18,7 @@ masterNodeSchema.methods.createFactories = async function(newFactories){
         this.save()
     }catch(err){
         console.log(err)
+        res.status(500).json({err})
     }
 }
 

@@ -7,16 +7,24 @@ const factorySchema = new Schema({
         type:Number,
         default:25,
     },
-    minVal:Number,
+    minVal:{
+        type:Number,
+        default:1,
+    },
     childCount:{
         type:Number,
-        max:15
+        max:15,
+        default:5
     },
     children:[Number],
 });
 
 factorySchema.methods.createChildren = function(){
-    console.log(this)
+    for(let i = 0; i < this.childCount; i++){
+        const newVal = (Math.random() * this.maxVal) + this.minVal;
+        console.log(newVal)
+        this.children.push(newVal)
+    }
 }
 
 const factory = model('Factory', factorySchema)
