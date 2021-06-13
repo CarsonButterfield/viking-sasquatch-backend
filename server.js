@@ -8,10 +8,22 @@ const config = require('./config.json')
 const corsOptions = {
     origin:config.origin,
 }
-
+//sends the updated node tree through the websocket
+const updateMessage = (masterNode) => {
+    expressWs.getWss().clients.forEach(client => {
+        client.send(masterNode)
+    })
+    
+    
+}
 //MIDDLEWARE
 app.use(bodyParser.json())
 app.use(cors(corsOptions))
+
+const expressWs = require('express-ws')(app)
+//WEBSOCKET
+app.ws('/updates', (ws, req) => {
+})
 
 
 app.delete('/factories/:factoryId', async (req, res) => {
@@ -21,7 +33,8 @@ app.delete('/factories/:factoryId', async (req, res) => {
             return f._id != req.params.factoryId;
         })
         await masterNode.save();
-        res.status(200).json(masterNode)
+        res.status(200).json({status:200})
+        updateMessage(JSON.stringify(masterNode))
     } catch (err) {
         console.log(err)
         res.status(500).json({err:500})
@@ -58,6 +71,22 @@ app.put('/factories/:factoryId', async (req, res) => {
         await masterNode.save()
         res.status(200).json({masterNode})
     }catch(err){
+        console.log(err)
+        res.status(500).json({err:500})
+    }
+})
+
+app.put('/factories/:factoryId/children', async ( req , res) => {
+    try {
+        const masterNode = await db.masterNode.findOne({})
+        factory = masterNode.factories.find( f => {
+            return f._id == req.params.factoryId
+        })
+        console.log(factory)
+        await factory.createChildren()
+        await masterNode.save()
+        res.status(200).json(masterNode)
+    } catch (err) {
         console.log(err)
         res.status(500).json({err:500})
     }
