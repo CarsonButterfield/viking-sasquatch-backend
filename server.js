@@ -10,6 +10,7 @@ const corsOptions = {
 }
 //sends the updated node tree through the websocket
 const updateMessage = (masterNode) => {
+    console.log("called")
     expressWs.getWss().clients.forEach(client => {
         client.send(masterNode)
     })
@@ -45,7 +46,8 @@ app.post('/factories', async (req, res) => {
     try {
         const masterNode = await db.masterNode.findOne({})
         await masterNode.createFactories(1)
-        res.status(200).json(masterNode)
+        res.status(200).json({status:204})
+        updateMessage(JSON.stringify(masterNode))
 
     } catch (err) {
         console.log(err)
@@ -69,7 +71,8 @@ app.put('/factories/:factoryId', async (req, res) => {
             }
         }
         await masterNode.save()
-        res.status(200).json({masterNode})
+        res.status(200)
+        updateMessage(JSON.stringify(masterNode))
     }catch(err){
         console.log(err)
         res.status(500).json({err:500})
@@ -85,7 +88,8 @@ app.put('/factories/:factoryId/children', async ( req , res) => {
         console.log(factory)
         await factory.createChildren()
         await masterNode.save()
-        res.status(200).json(masterNode)
+        res.status(200).json({status:204})
+        updateMessage(JSON.stringify(masterNode))
     } catch (err) {
         console.log(err)
         res.status(500).json({err:500})
@@ -123,7 +127,6 @@ app.post('/reset', async ( req, res ) => {
 app.get('/', async (req, res) => {
    try {
         const masterNode = await db.masterNode.findOne({})
-        
         res.send(masterNode)
    } catch (err) {
         console.log(err)
