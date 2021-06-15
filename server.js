@@ -115,7 +115,6 @@ app.post('/reset', async ( req, res ) => {
     try{
         await db.masterNode.deleteMany({}); // just to be safe, in case I accidentally create multiple
         const newMaster = await db.masterNode.create({})
-        await newMaster.createFactories(3)
         
         res.status(200).json(newMaster)
     } catch(err){
