@@ -45,7 +45,7 @@ app.delete('/factories/:factoryId', async (req, res) => {
 app.post('/factories', async (req, res) => {
     try {
         const masterNode = await db.masterNode.findOne({})
-        await masterNode.createFactories(1)
+        await masterNode.createFactories(req.body)
         res.status(200).json({status:204})
         updateMessage(JSON.stringify(masterNode))
 

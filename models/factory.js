@@ -6,6 +6,7 @@ const factorySchema = new Schema({
     maxVal:{
         type:Number,
         default:25,
+        max:1000,
     },
     minVal:{
         type:Number,
@@ -22,7 +23,7 @@ const factorySchema = new Schema({
 factorySchema.methods.createChildren = function(){
     this.children = [];
     for(let i = 0; i < this.childCount; i++){
-        const newVal = Math.floor((Math.random() * this.maxVal) + this.minVal);
+        const newVal = Math.floor((Math.random() * (this.maxVal - this.minVal + 1)) + this.minVal);
         this.children.push(newVal)
     }
 }

@@ -8,17 +8,16 @@ const masterNodeSchema = new Schema({
 
 
 // a method to add factories to the master node
-masterNodeSchema.methods.createFactories = async function(newFactories){
+masterNodeSchema.methods.createFactories = async function(factoryData){
     try{
-        for(let i = 0; i < newFactories; i++){
-            let newFactory = await factory.create({})
-            console.log(newFactory)
+            console.log(factoryData)
+            let newFactory = await factory.create(factoryData)
+            await newFactory.createChildren()
             this.factories.push( newFactory )
-        }
-        this.save()
+            await this.save()
     }catch(err){
         console.log(err)
-        res.status(500).json({err})
+        res.status(500).json({err:500})
     }
 }
 
