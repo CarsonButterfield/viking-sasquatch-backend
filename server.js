@@ -1,6 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const app = express()
+const expressWs = require('express-ws')(app)
 const bodyParser = require('body-parser')
 const db = require('./models')
 
@@ -10,7 +11,6 @@ const corsOptions = {
 }
 //sends the updated node tree through the websocket
 const updateMessage = (masterNode) => {
-    console.log("called")
     expressWs.getWss().clients.forEach(client => {
         client.send(masterNode)
     })
@@ -21,15 +21,9 @@ const updateMessage = (masterNode) => {
 app.use(bodyParser.json())
 app.use(cors(corsOptions))
 
-const expressWs = require('express-ws')(app)
 //WEBSOCKET
 app.ws('/updates', (ws, req) => {
-    ws.on('message', msg => {
-        console.log(msg)
-    })
-    ws.on('open', (data) => {
-        console.log({data})
-    })
+
 })
 
 
