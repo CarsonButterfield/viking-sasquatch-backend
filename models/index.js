@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 
 
-const DBURI = process.env.DBURI 
+const DBURI = process.env.DBURI //connects to Mongodb Atlast using ENV configs
 
 mongoose.connect(DBURI, {
     useNewUrlParser: true,

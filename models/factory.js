@@ -19,13 +19,14 @@ const factorySchema = new Schema({
     },
     children:[Number],
 });
-
+//The method to create this factories children
 factorySchema.methods.createChildren = function(){
-    this.children = [];
+    this.children = []; // removing the old children
     for(let i = 0; i < this.childCount; i++){
-        const newVal = Math.floor((Math.random() * (this.maxVal - this.minVal + 1)) + this.minVal);
+        const newVal = Math.floor((Math.random() * (this.maxVal - this.minVal + 1)) + this.minVal);//generating children within range (inclusive)
         this.children.push(newVal)
     }
+    //because the factories are embedded the master node must be saved after this function is called 
 }
 
 const factory = model('Factory', factorySchema)

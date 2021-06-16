@@ -2,6 +2,7 @@ const factory = require('./factory');
 const mongoose = require('mongoose');
 const { model , Schema } = mongoose
 
+//contains an array of factories, 
 const masterNodeSchema = new Schema({
     factories: [factory.schema],
 })
@@ -10,11 +11,10 @@ const masterNodeSchema = new Schema({
 // a method to add factories to the master node
 masterNodeSchema.methods.createFactories = async function(factoryData){
     try{
-            console.log(factoryData)
-            let newFactory = await factory.create(factoryData)
-            await newFactory.createChildren()
+            let newFactory = await factory.create(factoryData) //mongoose schema validates this data
+            await newFactory.createChildren() //populate the new factory
             this.factories.push( newFactory )
-            await this.save()
+            await this.save() //save the master node
     }catch(err){
         console.log(err)
         res.status(500).json({err:500})
