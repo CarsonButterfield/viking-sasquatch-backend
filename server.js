@@ -24,6 +24,12 @@ app.use(cors(corsOptions))
 const expressWs = require('express-ws')(app)
 //WEBSOCKET
 app.ws('/updates', (ws, req) => {
+    ws.on('message', msg => {
+        console.log(msg)
+    })
+    ws.on('open', (data) => {
+        console.log({data})
+    })
 })
 
 
