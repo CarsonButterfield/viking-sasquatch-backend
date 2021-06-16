@@ -3,10 +3,10 @@ const cors = require('cors')
 const app = express()
 const bodyParser = require('body-parser')
 const db = require('./models')
-const config = require('./config.json')
+
 
 const corsOptions = {
-    origin:config.origin,
+    origin:"*",
 }
 //sends the updated node tree through the websocket
 const updateMessage = (masterNode) => {
@@ -136,8 +136,8 @@ app.get('/', async (req, res) => {
 
 
 
-app.listen(config.PORT, err => {
+app.listen(process.env.PORT, err => {
     if(err) return console.log(err);
-    console.log(`Listening on port ${config.PORT}`)
+    console.log(`Listening on port ${process.env.PORT}`)
 })
 

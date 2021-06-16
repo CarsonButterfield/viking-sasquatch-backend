@@ -1,10 +1,9 @@
 
 const mongoose = require('mongoose')
 
-const config = require('../config.json')
 
 
-const DBURI = process.env.MONGODB_URI || `mongodb+srv://CButterfield:${config.DBpassword}@cluster0.byf9n.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`
+const DBURI = process.env.DB_URI 
 
 mongoose.connect(DBURI, {
     useNewUrlParser: true,
