@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 
 
 
-const DBURI = process.env.DB_URI 
+const DBURI = process.env.DBURI 
 
 mongoose.connect(DBURI, {
     useNewUrlParser: true,
